@@ -1,0 +1,6 @@
+package tn.firas.springsecurity.utils;
+
+public interface Constants {
+    String APP_ROOT = "api/v1";
+    String AUTHENTICATION_ENDPOINT = APP_ROOT + "/auth";
+}

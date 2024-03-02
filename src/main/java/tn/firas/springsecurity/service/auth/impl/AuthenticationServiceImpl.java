@@ -19,6 +19,7 @@ import tn.firas.springsecurity.repositories.TokenRepository;
 import tn.firas.springsecurity.repositories.UserRepository;
 import tn.firas.springsecurity.service.auth.AuthenticationService;
 import tn.firas.springsecurity.service.auth.JwtService;
+import tn.firas.springsecurity.validators.ObjectValidator;
 
 import java.io.IOException;
 
@@ -30,6 +31,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final ObjectValidator<RegisterRequest> validator;
 
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
@@ -39,6 +41,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .password(passwordEncoder.encode(request.password()))
                 .role(request.role())
                 .build();
+        validator.validate(request);
         var savedUser = repository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
